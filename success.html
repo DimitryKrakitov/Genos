@@ -2,12 +2,10 @@
 <html>
 <head><title>Genos</title></head>
 <body>
-<h1> Authentication successful for <input type="text" id="displayName"/></h1>
+<h1></h1>
 
-<script type="text/javascript">
-var elem = document.getElementById("displayName");
-elem.value = "$displayName";
-
+<script>
+document.getElementsByTagName("h1")[0].innerText = "Authentication successful for $displayName";
 </script>
 </body>
 </html>
