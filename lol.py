@@ -83,7 +83,7 @@ class joinfenix(webapp2.RequestHandler):
         url = client.get_authentication_url()
         print(url)
         self.redirect("%s" % url)
-        #https: // fenix.tecnico.ulisboa.pt / oauth / userdialog?client_id = < client_id > & redirect_uri = < redirect_uri >
+        # https: // fenix.tecnico.ulisboa.pt / oauth / userdialog?client_id = < client_id > & redirect_uri = < redirect_uri >
         # url = client.get_authentication_url()
 
         # print(url)
@@ -98,8 +98,24 @@ class acess_token(webapp2.RequestHandler):
         print(code)
         user = client.get_user_by_code('%s' % code)
         person = client.get_person(user)
-        s = '<!DOCTYPE html><html><head><title>Genos</title></head><h1> Authentication successful for %s </h1></html>' % person.get('displayName')
+        # s = '<!DOCTYPE html><html><head><title>Genos</title></head><h1> Authentication successful for %s </h1></html>' % person.get('displayName')
+        f = open("success.html", 'r')
+        templ_str = Template(f.read())
+        s = templ_str.substitute(displayName=person.get('displayName'))
         self.response.write(s)
+        #with open('success.html', 'w') as myFile:
+            #s = '<!DOCTYPE html><html><head><title>Genos</title></head><h1> Authentication successful for %s </h1></html>' % person.get('displayName')
+            #html_str = """
+            #<!DOCTYPE html>
+            #<html>
+            #<head>
+            #    <title>Genos</title>
+            #</head>
+            #    <h1> Authentication successful for""" + str(person.get('displayName')) + """</h1>
+            #</html>
+            #"""
+            #myFile.write(html_str)
+        #sendFile(self.response, 'success.html')
 
 
 app = webapp2.WSGIApplication([
@@ -113,7 +129,7 @@ app = webapp2.WSGIApplication([
 def main():
     from paste import httpserver
     httpserver.serve(app, host='127.0.0.1', port='8070')
-    #run(app_bottle, host='localhost', port=8070, reloader=True)
+    # run(app_bottle, host='localhost', port=8070, reloader=True)
 
 
 if __name__ == '__main__':
