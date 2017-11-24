@@ -92,7 +92,7 @@ class joinfenix(webapp2.RequestHandler):
         # self.response.write(s)
 
 
-class acess_token(webapp2.RequestHandler):
+class access_token(webapp2.RequestHandler):
     def get(self):
         code = self.request.get('code')
         print(code)
@@ -121,7 +121,7 @@ class acess_token(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     webapp2.Route(r'/authentication', authentication),
     webapp2.Route(r'/joinfenix', joinfenix),
-    webapp2.Route(r'/genos', acess_token)
+    webapp2.Route(r'/genos', access_token)
 
 ], debug=True)
 
