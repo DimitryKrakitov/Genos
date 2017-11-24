@@ -63,9 +63,7 @@ def sendFile(response, FileName):
 
 class authentication(webapp2.RequestHandler):
     def get(self):
-        s = "<head><title>Authentication</title></head>"
-        s += '<h1> Click the button to authenticate: </h1><a href="/joinfenix">ta da</a>'
-        self.response.write(s)
+        sendFile(self.response, 'authentication.html')
 
         # url = client.get_authentication_url()
         # print(url)
@@ -85,8 +83,9 @@ class joinfenix(webapp2.RequestHandler):
         url = client.get_authentication_url()
         print(url)
         self.redirect("%s" % url)
-
+        #https: // fenix.tecnico.ulisboa.pt / oauth / userdialog?client_id = < client_id > & redirect_uri = < redirect_uri >
         # url = client.get_authentication_url()
+
         # print(url)
         # s = "<head><title>Authentication</title></head>"
         # s += '<h1> Click the button to authenticate: </h1><a href="%s">ta da</a>' % url
@@ -94,27 +93,27 @@ class joinfenix(webapp2.RequestHandler):
 
 
 class acess_token(webapp2.RequestHandler):
-    def get(self, code):
-        print(str(code))
-        user = client.get_user_by_code('token' % code)
+    def get(self):
+        code = self.request.get('code')
+        print(code)
+        user = client.get_user_by_code('%s' % code)
         person = client.get_person(user)
-        s = "<head><title>Genos</title></head>"
-        s += '<h1> Authentication sucessful %s: </h1>' % person
+        s = '<!DOCTYPE html><html><head><title>Genos</title></head><h1> Authentication successful for %s </h1></html>' % person.get('displayName')
         self.response.write(s)
 
 
 app = webapp2.WSGIApplication([
     webapp2.Route(r'/authentication', authentication),
     webapp2.Route(r'/joinfenix', joinfenix),
-    webapp2.Route(r'/genos/<code>', acess_token)
+    webapp2.Route(r'/genos', acess_token)
 
 ], debug=True)
 
 
 def main():
     from paste import httpserver
-    #httpserver.serve(app, host='127.0.0.1', port='8070')
-    run(app_bottle, host='localhost', port=8070, reloader=True)
+    httpserver.serve(app, host='127.0.0.1', port='8070')
+    #run(app_bottle, host='localhost', port=8070, reloader=True)
 
 
 if __name__ == '__main__':
