@@ -18,6 +18,11 @@ url = client.get_authentication_url()
 print (url)
 
 
+spaces = client.get_spaces()
+print(spaces)
+for campus in spaces:
+    print (campus['name'])
+
 # user = client.get_user_by_code('359af2750f20ba3d45b84cfae58ae052aea33e961eae55ac794103e345a75399be4c2a1a90eb07f877d67c21ade16addb7b5145f577c06928c04acef2324be6f')
 
 # person = client.get_person(user)
