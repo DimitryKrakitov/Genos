@@ -13,12 +13,14 @@ class ist_map:
         campus_spaces = client.get_spaces()
         for campus in campus_spaces:
             aux_campus = node(panode=god, id=campus['id'], type=campus['type'], name=campus['name'])
+            print(campus['name'])
             ist_map.append(aux_campus)
             ist_map.n_nodes = ist_map.n_nodes + 1
             campus_info = client.get_space(campus['id'])
             for building in campus_info['containedSpaces']:
                 aux_building = node(panode=aux_campus, id=building['id'], type=building['type'], name=building['name'])
                 ist_map.append(aux_building)
+                print(" >"+building['name'])
                 ist_map.n_nodes = ist_map.n_nodes + 1
                 building_info = client.get_space(building['id'])# a building can have floors or rooms (wth no floors)
                 # In case of not having floors, we put generate a dummy floor = 0 node ????
@@ -26,15 +28,19 @@ class ist_map:
                     if(floor_room['type'] == "FLOOR"):
                         floor_aux = node(panode=aux_building, id=floor_room['id'], type=floor_room['type'], name=floor_room['name'])
                         ist_map.append(floor_aux)
+                        print("     >>" + floor_room['name'])
                         ist_map.n_nodes = ist_map.n_nodes + 1
                         floor_info = client.get_space(floor_room['id'])
                         for room in floor_info['containedSpaces']:
                             aux_room = room(panode=floor_aux, id=room['id'], type=room['type'], name=room['name']) ######### ADD THE LIMIT !!!!!
                             ist_map.append(aux_room)
+                            print("         >>>" + room['name'])
                             ist_map.n_nodes = ist_map.n_nodes + 1
                     else:
+                        ##### NO NEED OF DUMMY FLOOR, search looks for name
                         aux_room = room(panode=aux_building, id=floor_room['id'], type=floor_room['type'], name=floor_room['name'])  ######### ADD THE LIMIT !!!!!
                         ist_map.append(aux_room)
+                        print("         >>>" + floor_room['name'])
                         ist_map.n_nodes = ist_map.n_nodes + 1
 
 

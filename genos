@@ -1,15 +1,12 @@
 import fenixedu
-import webapp2
-from webapp2_extras import routes
-from webapp2_extras import jinja2
-from webapp2_extras import json
+
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
 from string import Template
 import mimetypes
 from jinja2 import Environment, select_autoescape, FileSystemLoader
-
-from bottle import Bottle, run, template, request, debug
-
-app_bottle = Bottle()
 
 config = fenixedu.FenixEduConfiguration.fromConfigFile('fenixedu.ini')
 
@@ -33,25 +30,6 @@ for campus in spaces:
 
 # print(person)
 
-@app_bottle.route('/')
-# example: http://localhost:8080/query?a=12
-#         http://localhost:8080/query?add=12
-#         http://localhost:8080/query
-@app_bottle.route('/genos')
-def query_function():
-    print("ENTROU")
-    if len(request.query) == 0:
-        return "query should have add argument: example: <b>Example</b>"
-    if "code" in request.query.keys():
-        print(request.query["code"])
-        return "just inserted %s to the array<br>" % request.query["code"]
-    else:
-        return "query should have add argument: example: <b>http://localhost:8080/query?a=12</b>"
-        # for a in request.query:
-        #	print (a, request.query[a])
-        #	st.store(request.query[a])
-        #	return "just inserted %s to the array<br>"%request.query[a]
-
 
 env = Environment(
     loader=FileSystemLoader('./web'),
@@ -65,10 +43,9 @@ def sendFile(response, FileName):
     response.write(f.read())
     f.close()
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        template = env.get_template('index.html')
-        return template.render()
+@app.route('/')
+def homepage():
+        return render_template("web/index.html")
         #sendFile(self.response, 'web/index.html')
 
 class authentication(webapp2.RequestHandler):
@@ -137,11 +114,6 @@ app = webapp2.WSGIApplication([
 ], debug=True)
 
 
-def main():
-    from paste import httpserver
-    httpserver.serve(app, host='127.0.0.1', port='8070')
-    # run(app_bottle, host='localhost', port=8070, reloader=True)
 
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+	app.run(debug = True, host='0.0.0.0', port=8070, passthrough_errors=True)
