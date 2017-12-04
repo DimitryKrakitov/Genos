@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django</title>
+</head>
+<body>
+    {% if all_campus %}
+    <ul>
+        {% for campus in all_campus %}
+            <li>
+                <a href="/map/{{ campus.id }}/">{{ campus.name }} </a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <h3> There are no stored campuses!</h3>
+    {% endif %}
+</body>
+</html>
